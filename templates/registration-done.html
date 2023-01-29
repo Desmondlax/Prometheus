@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="{{ url_for('static', path='prometheus-logo-96.png') }}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UMP Prometheus</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Raleway:wght@200;300;400;600;700&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  </head>
+
+  <body>
+    <header class="primary-header">
+      <div class="container">
+        <div class="nav-wrapper">
+          <a href="/" class="branding"><img src="static/assets/prometheus-brand.png" alt="Logo"></a>
+          <button class="mobile-nav" aria-controls="primary-nav" aria-expanded="false">
+            <span class="screenreader-hidden">Menu</span>
+          </button>
+          <nav class="primary-nav" id="primary-nav">
+            <ul role="list" aria-label="Primary" class="nav-list">
+              <li><a href="/">Vote</a></li>
+              <li><a href="/blockchain">Blockchain</a></li>
+              <li><a href="/results">Results</a></li>
+            </ul>
+          </nav>
+          <div class="status-indicator">
+              <div class="outer-circle">
+                <div class="inner-circle">
+                </div>
+              </div>
+              <p class="status-header | fw-semi-bold">Status</p>
+              <p class="status">Unverified</p>
+          </div>
+        </div>
+      </div>
+    </header><hr style="max-width: 1110px; margin-inline: auto">
+
+    <main>
+      <section class="padding-block-700">
+        <div class="page-title-container">
+            <div class="page-title">Voter Registration</div>
+        </div>
+        <div class="form-body">  
+            <div class="form-container">
+                <h1 class="zkprooftext-primary" style="text-align: center">This is your ZK Proof Statement:</h1>
+                <p class="zkprooftext" style="text-align: center">(Submit to the vote page in order to cast your vote)</p>
+                <div class="zkproof-container">
+                  <p class="fw-semi-bold | zkproof" onClick="copystuff()" id="zkproofstatement">{{ zkproofstatement }}</p>
+                  <img src="static/assets/clone-64.png" alt="Press text to copy" style="max-height: 35px; max-width: 35px;">
+                </div>
+                               
+            </div>
+        </div>    
+      </section>
+    </main>
+
+    <footer class="primary-footer | padding-block-700 bg-primary-400 text-neutral-100">
+      <div class="container">
+        <div class="primary-footer-wrapper | even-columns">
+          <div class="footer-logo">
+            <a href="#"><img src="static/assets/prometheus-brand-dark.png" alt="Logo"></a>
+          </div>
+          <div>
+            <nav class="footer-nav">
+              <ul class="footer-nav-mobile | flow" style="--flow-spacer: 1em" role="list" aria-label="footer navigation">
+                <li><a href="/">VOTE</a></li>
+                <li><a href="/blockchain">BLOCKCHAIN</a></li>
+                <li><a href="/results">RESULTS</a></li>
+              </ul>
+            </nav>
+          </div>
+          <div>
+            <h2 class="follow-socials">FOLLOW US</h2>
+            <ul class="social-list" role="list" aria-label="social links">
+              <li><a aria-label="facebook" href="#">
+                <svg class="social-icon">
+                  <use xlink:href="static/assets/social-icons.svg#facebook-30"></use>
+                </svg>
+              </a></li>
+              <li><a aria-label="instagram" href="#">
+                <svg class="social-icon">
+                  <use xlink:href="static/assets/social-icons.svg#instagram-old-30"></use>
+                </svg>
+              </a></li>
+              <li><a aria-label="twitter" href="#">
+                <svg class="social-icon">
+                  <use xlink:href="static/assets/social-icons.svg#twitter-30"></use>
+                </svg>
+              </a></li>
+              <li><a aria-label="linkedin" href="#">
+                <svg class="social-icon">
+                  <use xlink:href="static/assets/social-icons.svg#linkedin-30"></use>
+                </svg>
+              </a></li>
+              <li><a aria-label="github" href="#">
+                <svg class="social-icon">
+                  <use xlink:href="static/assets/social-icons.svg#github-30"></use>
+                </svg>
+              </a></li>
+            </ul>
+          </div>
+        </div>
+        <hr style="border-color: var(--clr-neutral-100); margin-top: 2em; margin-bottom: 2em;">
+          <div style="text-align: center;">
+            <p>©2022 Prometheus Labs</p>
+            <p>Developed by Lim Aun Xian (CA19089)</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script type="module" src="static/main.js"></script>
+  </body>
+</html>

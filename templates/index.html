@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="{{ url_for('static', path='prometheus-logo-96.png') }}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UMP Prometheus</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Raleway:wght@200;300;400;600;700&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  </head>
+
+  <body>
+    <input type="hidden" id="status" value="unverified">
+    <header class="primary-header">
+      <div class="container">
+        <div class="nav-wrapper">
+          <a href="/" class="branding"><img src="static/assets/prometheus-brand.png" alt="Logo"></a>
+          <button class="mobile-nav" aria-controls="primary-nav" aria-expanded="false">
+            <span class="screenreader-hidden">Menu</span>
+          </button>
+          <nav class="primary-nav" id="primary-nav">
+            <ul role="list" aria-label="Primary" class="nav-list">
+              <li><a href="/">Vote</a></li>
+              <li><a href="/blockchain">Blockchain</a></li>
+              <li><a href="/results">Results</a></li>
+            </ul>
+          </nav>
+          <div class="status-indicator">
+              <div class="outer-circle">
+                <div class="inner-circle">
+                </div>
+              </div>
+              <p class="status-header | fw-semi-bold">Status</p>
+              <p class="status">Unverified</p>
+          </div>
+        </div>
+      </div>
+    </header><hr style="max-width: 1110px; margin-inline: auto">
+
+    <main>
+      <section class="padding-block-700">
+        <div class="page-title-container">
+          <div class="page-title">UMP Blockchain Voting System</div>
+      </div>
+      <div class="vote-reg-body">  
+          <div class="vote-reg-container">
+              <form class="form" method="POST">
+                  <div class="vote-reg-submission">
+                      <div class="input-box-zkproof">
+                          <input type="text" placeholder="Zero Knowledge Proof" aria-label="zero knowledge proof" name="zkproof" id="zkproof" required>
+                      </div>
+                      <div class="input-box-2fa">
+                          <!--<input type="number" placeholder="2FA Code" aria-label="two factor authentication code" name="2fa" id="2fa">-->
+                      </div>
+                      <div class="form-button">
+                          <input type="submit" value="Validate">
+                          <button type="button" class="registration-button" onclick="document.location='registration'">Don't have your zero knowledge proof? Register here</button>
+                      </div>
+                  </div>
+              </form>
+          </div>
+      </div>
+      </section>
+
+      <section class="padding-block-500" style="margin-bottom: 70px;">
+        <div class="container">
+          <div class="even-columns">
+            <div class="flow">
+              <h2 class="fs-primary-heading fw-bold">What are Blockchain technology & Zero-Knowledge Proofs?</h2>
+              <p data-width="wide">Blockchain technology uses a digital ledger to store transactions that is secured & validated through the use of cryptography. The addition of Zero-Knowledge proofs adds a layer of security, validating information without the exchange of sensitive information</p>
+            </div>
+            <div>
+              <ul class="numbered-items | flow" role="list">          
+                <li class="flow">
+                  <h3 class="fs-600 fw-bold">Verifiability</h3>
+                  <p data-width="wide">All transactions conducted on the blockchain is available for all parties to view and verify that their vote has been casted, counted and tabulated in the final tally.</p>
+                </li>
+                <li class="flow">
+                  <h3 class="fs-600 fw-bold">Immutable</h3>
+                  <p data-width="wide">Transactions stored in the ledger of the blockchain cannot be altered easily. Once transactions are committed and pushed on chain, it will not be changed unless all nodes approve of the change</p>
+                </li>
+                <li class="flow">
+                  <h3 class="fs-600 fw-bold">Risk Mitigation</h3>
+                  <p data-width="wide">No exchange of personal data is necessary to prove the voter's identity, mitigating the risk associated with mishandling of personal data.</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="primary-footer | padding-block-700 bg-primary-400 text-neutral-100">
+      <div class="container">
+        <div class="primary-footer-wrapper | even-columns">
+          <div class="footer-logo">
+            <a href="#"><img src="static/assets/prometheus-brand-dark.png" alt="Logo"></a>
+          </div>
+          <div>
+            <nav class="footer-nav">
+              <ul class="footer-nav-mobile | flow" style="--flow-spacer: 1em" role="list" aria-label="footer navigation">
+                <li><a href="/">VOTE</a></li>
+                <li><a href="/blockchain">BLOCKCHAIN</a></li>
+                <li><a href="/results">RESULTS</a></li>
+              </ul>
+            </nav>
+          </div>
+          <div>
+            <h2 class="follow-socials">FOLLOW US</h2>
+            <ul class="social-list" role="list" aria-label="social links">
+              <li><a aria-label="facebook" href="#">
+                <svg class="social-icon">
+                  <use xlink:href="static/assets/social-icons.svg#facebook-30"></use>
+                </svg>
+              </a></li>
+              <li><a aria-label="instagram" href="#">
+                <svg class="social-icon">
+                  <use xlink:href="static/assets/social-icons.svg#instagram-old-30"></use>
+                </svg>
+              </a></li>
+              <li><a aria-label="twitter" href="#">
+                <svg class="social-icon">
+                  <use xlink:href="static/assets/social-icons.svg#twitter-30"></use>
+                </svg>
+              </a></li>
+              <li><a aria-label="linkedin" href="#">
+                <svg class="social-icon">
+                  <use xlink:href="static/assets/social-icons.svg#linkedin-30"></use>
+                </svg>
+              </a></li>
+              <li><a aria-label="github" href="#">
+                <svg class="social-icon">
+                  <use xlink:href="static/assets/social-icons.svg#github-30"></use>
+                </svg>
+              </a></li>
+            </ul>
+          </div>
+        </div>
+        <hr style="border-color: var(--clr-neutral-100); margin-top: 2em; margin-bottom: 2em;">
+          <div style="text-align: center;">
+            <p>©2022 Prometheus Labs</p>
+            <p>Developed by Lim Aun Xian (CA19089)</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    
+
+
+
+    <script type="module" src="static/main.js"></script>
+  </body>
+</html>

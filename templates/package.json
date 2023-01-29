@@ -1,0 +1,18 @@
+{
+  "name": "prometheus",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite && npm run cp:py",
+    "build": "vite build && npm run cp:py",
+    "cp:py": "cp -n src/python/*.py dist/python",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^3.1.0"
+  },
+  "dependencies": {
+    "python-shell": "^3.0.1"
+  }
+}
