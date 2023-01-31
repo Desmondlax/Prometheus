@@ -17,10 +17,6 @@ app = _fastapi.FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-@app.on_event("startup")
-async def startup_event():
-    _zkproof.zkproofstartup()
-    
 if __name__ == '__main__':
     uvicorn.run(app)
 
@@ -51,7 +47,6 @@ def registrationpage(request: Request):
 def return_form(request: Request, name: str = Form(...), age: int = Form(...), faculty : str = Form(...), email : str = Form(...), studentid : str = Form(...)):
 
     userdata = name + ":" + str(age) + ":" + faculty + ":" + email + ":" + studentid
-    _zkproof.clientobtainrestart()
     print(userdata)
     return get_zkproofstatement(request, userdata)
 
@@ -265,27 +260,15 @@ def final_block():
 
 @app.post("/get_zkproof/")
 def get_zkproofstatement(request: Request, userdata):
-    global zkproofstatement
-    zkproofstatement = _zkproof.studentsignature(userdata)
-    print(zkproofstatement)
-    return get_zkproof(request, zkproofstatement)
 
-@app.post("/get_token/")
-def get_zkproof(request: Request,zkproofstatement: str):
-    global tokencontent
-    
-    tokencontent = _zkproof.tokenpassing(zkproofstatement)
-    print(tokencontent)
+    zkproofstatement = _zkproof.studentsignature(userdata)
     
     return templates.TemplateResponse("registration-done.html", {"request": request, "zkproofstatement": zkproofstatement})
 
 @app.post("/validate_zkproof")
 def validate(request : Request, zkproof: str):
-    token = tokencontent
-    status = _zkproof.zkproofvalidate(token,zkproof)
     
-    print(status)
-    
+    status = _zkproof.zkstartup(zkproof)
     return status
 
 def increment_A():

@@ -3,94 +3,14 @@ from queue import Queue
 from threading import Thread
 import hashlib as hashlib
 
-global q1, q2
-global validation
-
 q1, q2 = Queue(), Queue()
+x = False
 
-def infopassing(input:Queue, output: Queue, zkproofstatement):
+def userdata(iq: Queue, oq: Queue, zkproof: str):
+    oq.put(zkproof)
+    iq.get(x)
     
-    global tokenstatement
-    output.put(zkproofstatement)
-    tokenstatement = input.get()
-    
-def zkpassing(input:Queue, output: Queue, token, zkproofstatement):
-    
-    output.put(zkproofstatement)
-    output.put(token)
-    
-    return
-
-def client_obtain(input: Queue, output: Queue):
-    
-    global client_zkp
-    client_zkp = ZK.new(curve_name="secp256k1", hash_alg="sha256")
-
-    #1. Make signature and sends it to the server
-    userdata = input.get()
-    
-    signature = client_zkp.create_signature(userdata)
-    output.put(signature.dump())
-
-    #5. Server passes back the token
-    global token
-    token = input.get()
-    
-    output.put(token)
-    return
-
-def client_validate(input: Queue, output: Queue, token, client_zkp : ZK, zkproofstatement):
-    
-    zkproofstatement = input.get()
-    token = input.get()
-    client_zk = client_zkp
-    #6. Proof is created, token is signed
-    proof = client_zk.sign(zkproofstatement, token).dump()
-
-    #7. Send token and proof to the server
-    output.put(proof)
-    
-    global x
-    #10. Finish with action or something
-    if input.get():
-        x = True
-        return x
-    else:
-        x = False
-        return x
-
-def server(input: Queue, output: Queue):
-    
-    #2. server setup
-    global server_zkp
-    global client_signature
-    
-    server_zkp = ZK.new(curve_name="secp384r1", hash_alg="sha3_512")
-
-    #3. Obtain signature from client
-    sig = input.get()
-    client_signature = ZKSignature.load(sig)
-    client_zkp = ZK(client_signature.params)
-
-    #4. Create signed token and send to client
-    token = server_zkp.sign("SecurePassword", client_zkp.token())
-    output.put(token.dump(separator=":"))
-    
-    return
-
-def server_validate(input: Queue, output: Queue):
-    server_signature: ZKSignature = server_zkp.create_signature("SecurePassword")
-    #8. Receive proof and token from client
-    proof = ZKData.load(input.get())
-    token = ZKData.load(proof.data, ":")
-    print(token)
-
-    #9. Signs token once verified 
-    if not server_zkp.verify(token, server_signature):
-        output.put(False)
-    else:
-        output.put(client_zkp.verify(proof, client_signature, data=token))
-        return
+    return x
 
 def studentsignature(userdata):
     userdata2 = userdata
@@ -110,35 +30,72 @@ def studentsignature(userdata):
     zkproofstatement = hash     
     return zkproofstatement
 
+def client(iq: Queue, oq: Queue):
+    global x
+    client_zk = ZK.new(curve_name="secp256k1", hash_alg="sha3_256")
 
-def zkproofstartup():
-    serverstart = Thread(target=server, args=(q2, q1))
+    # Create signature and send to server
+    zkproofstatement = iq.get()
+    signature = client_zk.create_signature(zkproofstatement)
+    oq.put(signature.dump())
+
+    # Receive the token from the server
+    token = iq.get()
+
+    # Create a proof that signs the provided token and sends to server
+    proof = client_zk.sign(zkproofstatement, token).dump()
+
+    # Send the token and proof to the server
+    oq.put(proof)
+
+    # Wait for server response!
+    if iq.get():
+        x = True
+        oq.put(x)
+        return
+    else:
+        oq.put(x)
+        return
+
+
+def server(iq: Queue, oq: Queue):
+    # Set up server component
+    server_password = "SecretServerPassword"
+    server_zk = ZK.new(curve_name="secp384r1", hash_alg="sha3_512")
+    server_signature: ZKSignature = server_zk.create_signature("SecureServerPassword")
+
+    # Load the received signature from the Client
+    sig = iq.get()
+    client_signature = ZKSignature.load(sig)
+    client_zk = ZK(client_signature.params)
+
+    # Create a signed token and send to the client
+    token = server_zk.sign("SecureServerPassword", client_zk.token())
+    oq.put(token.dump(separator=":"))
+
+    # Get the token from the client
+    proof = ZKData.load(iq.get())
+    token = ZKData.load(proof.data, ":")
+
+    # In this example, the server signs the token so it can be sure it has not been modified
+    if not server_zk.verify(token, server_signature):
+        oq.put(False)
+        return
+    else:
+        oq.put(client_zk.verify(proof, client_signature, data=token))
+        return
+
+
+def zkstartup(zkproof):
+    global x
+    q1, q2 = Queue(), Queue()
+    
+    clientstart = Thread(target=client, args=(q1,q2))
+    clientstart.start()
+    serverstart = Thread(target=server, args=(q2,q1))
     serverstart.start()
-
-def zkproofvalidate(token : str,zkproofstatement : str): 
-    clientvalidate = Thread(target=client_validate, args=(q1, q2, token, client_zkp, zkproofstatement))
-    clientvalidate.start()
-    servervalidate = Thread(target=client_validate, args=(q2, q1, token, client_zkp, zkproofstatement))
-    servervalidate.start()
-    zkpass = Thread(target=zkpassing, args=(q2, q1, token, zkproofstatement))
-    zkpass.start()
-    clientvalidate.join()
-    servervalidate.join()  
+    userdatastart = Thread(target=userdata, args=(q2,q1,zkproof))
+    userdatastart.start()
+    userdatastart.join()
     
     return x
-
-def tokenpassing(zkproofstatement: str):
-    tokenpass = Thread(target=infopassing, args=(q2, q1, zkproofstatement))
-    tokenpass.start()
-    tokenpass.join()
-    
-    return tokenstatement
-
-def serverrestart():
-    serverstart = Thread(target=server, args=(q2, q1))
-    serverstart.start()
-    
-def clientobtainrestart():
-    clientstart = Thread(target=client_obtain, args=(q1, q2))
-    clientstart.start()
-    
