@@ -9,15 +9,20 @@ global validation
 q1, q2 = Queue(), Queue()
 
 def infopassing(input:Queue, output: Queue, zkproofstatement):
+    
     global tokenstatement
     output.put(zkproofstatement)
     tokenstatement = input.get()
     
 def zkpassing(input:Queue, output: Queue, token, zkproofstatement):
+    
     output.put(zkproofstatement)
     output.put(token)
+    
+    return
 
-def client_obtain(input: Queue, output: Queue, validation):
+def client_obtain(input: Queue, output: Queue):
+    
     global client_zkp
     client_zkp = ZK.new(curve_name="secp256k1", hash_alg="sha256")
 
@@ -32,8 +37,10 @@ def client_obtain(input: Queue, output: Queue, validation):
     token = input.get()
     
     output.put(token)
+    return
 
 def client_validate(input: Queue, output: Queue, token, client_zkp : ZK, zkproofstatement):
+    
     zkproofstatement = input.get()
     token = input.get()
     client_zk = client_zkp
@@ -53,13 +60,12 @@ def client_validate(input: Queue, output: Queue, token, client_zkp : ZK, zkproof
         return x
 
 def server(input: Queue, output: Queue):
+    
     #2. server setup
     global server_zkp
     global client_signature
     
-    server_password = "SecretPassword"
     server_zkp = ZK.new(curve_name="secp384r1", hash_alg="sha3_512")
-    server_signature: ZKSignature = server_zkp.create_signature("SecurePassword")
 
     #3. Obtain signature from client
     sig = input.get()
@@ -69,17 +75,22 @@ def server(input: Queue, output: Queue):
     #4. Create signed token and send to client
     token = server_zkp.sign("SecurePassword", client_zkp.token())
     output.put(token.dump(separator=":"))
+    
+    return
 
+def server_validate(input: Queue, output: Queue):
+    server_signature: ZKSignature = server_zkp.create_signature("SecurePassword")
     #8. Receive proof and token from client
     proof = ZKData.load(input.get())
-    
     token = ZKData.load(proof.data, ":")
+    print(token)
 
     #9. Signs token once verified 
     if not server_zkp.verify(token, server_signature):
         output.put(False)
     else:
         output.put(client_zkp.verify(proof, client_signature, data=token))
+        return
 
 def studentsignature(userdata):
     userdata2 = userdata
@@ -101,19 +112,18 @@ def studentsignature(userdata):
 
 
 def zkproofstartup():
-    
-    validation = False
-    clientstart = Thread(target=client_obtain, args=(q1, q2, validation))
-    clientstart.start()
     serverstart = Thread(target=server, args=(q2, q1))
     serverstart.start()
 
 def zkproofvalidate(token : str,zkproofstatement : str): 
     clientvalidate = Thread(target=client_validate, args=(q1, q2, token, client_zkp, zkproofstatement))
     clientvalidate.start()
+    servervalidate = Thread(target=client_validate, args=(q2, q1, token, client_zkp, zkproofstatement))
+    servervalidate.start()
     zkpass = Thread(target=zkpassing, args=(q2, q1, token, zkproofstatement))
-    zkpass.start()    
+    zkpass.start()
     clientvalidate.join()
+    servervalidate.join()  
     
     return x
 
@@ -123,3 +133,12 @@ def tokenpassing(zkproofstatement: str):
     tokenpass.join()
     
     return tokenstatement
+
+def serverrestart():
+    serverstart = Thread(target=server, args=(q2, q1))
+    serverstart.start()
+    
+def clientobtainrestart():
+    clientstart = Thread(target=client_obtain, args=(q1, q2))
+    clientstart.start()
+    

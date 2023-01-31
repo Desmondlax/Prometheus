@@ -448,7 +448,7 @@ h1 {
 
 .page-title {
   font-size: var(--fs-800);
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 700;
 }
 
@@ -814,7 +814,7 @@ form .vote-reg-submission .input-box-2fa {
 
 .candidatename {
   font-size: 2.5rem;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 700;
 }
 
@@ -931,7 +931,7 @@ form .vote-reg-submission .input-box-2fa {
 /* Blockchain Transaction */
 .chain-query-body {
   display: flex;
-  height: 60vh;
+  height: 75vh;
   justify-content: center;
   align-items: center;
 }

@@ -51,6 +51,7 @@ def registrationpage(request: Request):
 def return_form(request: Request, name: str = Form(...), age: int = Form(...), faculty : str = Form(...), email : str = Form(...), studentid : str = Form(...)):
 
     userdata = name + ":" + str(age) + ":" + faculty + ":" + email + ":" + studentid
+    _zkproof.clientobtainrestart()
     print(userdata)
     return get_zkproofstatement(request, userdata)
 
