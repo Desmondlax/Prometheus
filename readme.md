@@ -1,5 +1,5 @@
 Prometheus (UMP Blockchain Voting System)
-Prometheus is a blockchain voting system developed for UMP student council elections by Lim Aun Xian utilizing Python, HTML, CSS and Javascript.
+Prometheus is a blockchain voting system developed for UMP student council elections by Desmond Lim utilizing Python, HTML, CSS and Javascript.
 
 1. Installation and Running of File
 
