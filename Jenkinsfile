@@ -1,7 +1,7 @@
 pipeline {
     agent { 
         node {
-            label 'docker-agent-fastapi'
+            label 'docker-agent-python'
             }
       }
 	triggers {
@@ -18,6 +18,7 @@ pipeline {
                 echo "Starting the build..."
                 sh '''
                 echo pwd
+                pip install --no-cache-dir --upgrade -r /code/requirements.txt
 				uvicorn main:app --reload --host 127.0.0.1 --port 80
                 '''
             }
