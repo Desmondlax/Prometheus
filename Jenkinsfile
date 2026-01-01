@@ -7,6 +7,9 @@ pipeline {
 	triggers {
         pollSCM 'H * * * *'
 	  }
+    environment {
+        PATH="/home/jenkins/.local/bin:$PATH"
+    }
     stages {
         stage('Clone') {
             steps {
