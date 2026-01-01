@@ -30,7 +30,7 @@ pipeline {
                     def maxRetries = 5
                     def retryDelay = 5
                     
-                    for (int i=0; i < maxRetries, i++){
+                    for (int i=0; i < maxRetries; i++){
                         try {
                             def status = sh(
                                 script: "curl -sLI -w '%{http_code}' ${url} -o /dev/null",
