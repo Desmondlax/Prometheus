@@ -18,7 +18,6 @@ pipeline {
                 echo "Starting the build..."
                 sh '''
                 echo "$PWD"
-                apk add --no-cache python3 py3-pip
                 pip install --no-cache-dir --upgrade -r /home/jenkins/workspace/prometheus_test/requirements.txt
 				uvicorn main:app --reload --host 127.0.0.1 --port 80
                 '''
