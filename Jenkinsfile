@@ -1,7 +1,7 @@
 pipeline {
     agent { 
         node {
-            label 'jenkins-fastapi'
+            label 'docker-agent-fastapi'
             }
       }
 	triggers {
