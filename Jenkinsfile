@@ -17,8 +17,7 @@ pipeline {
             steps {
                 echo "Starting the build..."
                 sh '''
-                apk add --no-cache python3 py3-pip
-                pip install --no-cache-dir --upgrade -r /code/requirements.txt
+                echo "$PWD"
 				uvicorn main:app --reload --host 127.0.0.1 --port 80
                 '''
             }
