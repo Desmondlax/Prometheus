@@ -3,8 +3,8 @@ Prometheus is a blockchain voting system developed for UMP student council elect
 
 1. Installation and Running of File
 
-Start by installing uvicorn:
- $ pip install uvicorn
+Start by installing the prerequisites:
+ $ pip install -r requirements.txt
 
  The system can then be started using the command:
 $ uvicorn main:app --reload
