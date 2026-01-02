@@ -56,9 +56,6 @@ pipeline {
 
                                     if (status == "200" || status == "201") {
                                         echo "Connectivity successful!"
-                                        def fastapi_pid = sh( script: "head -n 4 /home/jenkins/workspace/prometheus_test/api_output.log | grep -o '[[:digit:]]*' | tail -1")
-                                        echo ${fastapi_pid}
-                                        sh ''' kill ${fastapi_pid}''' 
                                         break // Exit the loop on success
                                     }
                                 } catch (Exception e) {
@@ -70,10 +67,11 @@ pipeline {
                                 } else {
                                     error("Max retries reached. Failed to connect to ${url}") // Fail the pipeline
                                 }
-                            }
-                            
+                            }  
                         }
-                        
+                       def fastapi_pid = sh( script: "head -n 4 /home/jenkins/workspace/prometheus_test/api_output.log | grep -o '[[:digit:]]*' | tail -1")
+                       echo ${fastapi_pid}
+                       sh ''' kill ${fastapi_pid}'''  
                     }
                 }
             }
