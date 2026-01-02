@@ -56,7 +56,7 @@ pipeline {
 
                                     if (status == "200" || status == "201") {
                                         echo "Connectivity successful!"
-                                        def fastapi_pid = sh( script: "head -n 4 /home/jenkins/workspace/prometheus_test/api_output.log | grep -Eo '[0-9]\{3\}' | tail -1")
+                                        def fastapi_pid = sh( script: "head -n 4 /home/jenkins/workspace/prometheus_test/api_output.log | grep -o '[[:digit:]]*' | tail -1")
                                         //server_shutdown = true
                                         os.kill(${fastapi_pid}, signal.SIGINT)
                                         break // Exit the loop on success
