@@ -40,9 +40,6 @@ pipeline {
                         sleep 300
                         '''
                         echo "Testing.."
-                        echo "Printing FastAPI output logs..."
-                        print(api_output.log)
-
                         script {
                             def url = 'http://127.0.0.1:80/'
                             def maxRetries = 5
