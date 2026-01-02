@@ -24,7 +24,7 @@ pipeline {
                             echo "Starting the build..."
                             sh '''
                             pip install --no-cache-dir --upgrade -r /home/jenkins/workspace/prometheus_test/requirements.txt --break-system-packages
-                            uvicorn main:app --reload --host 127.0.0.1 --port 80 > /home/jenkins/workspace/prometheus_test/api_output.log >&1
+                            uvicorn main:app --reload --host 127.0.0.1 --port 80 > /home/jenkins/workspace/prometheus_test/api_output.log 2>&1
                             '''
                             /*
                             script{
