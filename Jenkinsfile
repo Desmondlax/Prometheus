@@ -25,8 +25,10 @@ pipeline {
                             sh '''
                             pip install --no-cache-dir --upgrade -r /home/jenkins/workspace/prometheus_test/requirements.txt --break-system-packages
                             '''
-                            def server_output = sh(script: "uvicorn main:app --reload --host 127.0.0.1 --port 80", returnStdout: true)
+                            script{
+                                def server_output = sh(script: "uvicorn main:app --reload --host 127.0.0.1 --port 80", returnStdout: true)
                             print(server_output)
+                            }    
                     }
                 }
                 stage('Test') {
