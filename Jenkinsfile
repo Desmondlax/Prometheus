@@ -1,3 +1,5 @@
+def server_shutdown = false
+
 pipeline {
     agent { 
         node {
@@ -25,6 +27,10 @@ pipeline {
                         pip install --no-cache-dir --upgrade -r /home/jenkins/workspace/prometheus_test/requirements.txt --break-system-packages
                         uvicorn main:app --reload --host 127.0.0.1 --port 80
                         '''
+                        when {server_shutdown = true}
+                            steps {
+                                os.kill(os.getpid(), signal.SIGINT)
+                            }
                     }
                 }
                 stage('Test') {
@@ -49,6 +55,7 @@ pipeline {
 
                                     if (status == "200" || status == "201") {
                                         echo "Connectivity successful!"
+                                        server_shutdown = true
                                         break // Exit the loop on success
                                     }
                                 } catch (Exception e) {
