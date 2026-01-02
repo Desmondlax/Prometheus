@@ -70,7 +70,7 @@ pipeline {
                             }
                             def fastapi_pid = sh( script: "head -n 4 /home/jenkins/workspace/prometheus_test/api_output.log | grep -o '[[:digit:]]*' | tail -1", returnStdout: true).trim()
                             echo "${fastapi_pid}"
-                            sh ''' kill ${fastapi_pid}'''
+                            sh "kill ${fastapi_pid}"
                         }  
                     }
                 }
