@@ -24,11 +24,14 @@ pipeline {
                             echo "Starting the build..."
                             sh '''
                             pip install --no-cache-dir --upgrade -r /home/jenkins/workspace/prometheus_test/requirements.txt --break-system-packages
+                            uvicorn main:app --reload --host 127.0.0.1 --port 80 > api_output.log 2>&1
                             '''
+                            /*
                             script{
                                 def server_output = sh(script: "uvicorn main:app --reload --host 127.0.0.1 --port 80", returnStdout: true)
                             print(server_output)
-                            }    
+                            }
+                            */  
                     }
                 }
                 stage('Test') {
@@ -37,6 +40,9 @@ pipeline {
                         sleep 300
                         '''
                         echo "Testing.."
+                        echo "Printing FastAPI output logs..."
+                        print(api_output.log)
+
                         script {
                             def url = 'http://127.0.0.1:80/'
                             def maxRetries = 5
@@ -53,8 +59,8 @@ pipeline {
 
                                     if (status == "200" || status == "201") {
                                         echo "Connectivity successful!"
-                                        server_shutdown = true
-                                        os.kill(fastapi_pid, signal.SIGINT)
+                                        //server_shutdown = true
+                                        //os.kill(fastapi_pid, signal.SIGINT)
                                         break // Exit the loop on success
                                     }
                                 } catch (Exception e) {
