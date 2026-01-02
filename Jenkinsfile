@@ -41,7 +41,7 @@ pipeline {
                             for (int i=0; i < maxRetries; i++){
                                 try {
                                     def status = sh(
-                                        script: "curl -sLI -w '%{http_code}' ${url} -o /dev/null",
+                                        script: "curl --write-out '%{http_code}' -o /dev/null ${url}",
                                         returnStdout: true
                                     ).trim()
 
