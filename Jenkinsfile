@@ -21,7 +21,7 @@ pipeline {
             parallel{
                 stage('Build') {
                     steps {
-                            timeout(time: 15, unit: 'MINUTES'){
+                            timeout(time: 10, unit: 'MINUTES'){
                                 echo "Starting the build..."
                                 sh '''
                                 pip install --no-cache-dir --upgrade -r /home/jenkins/workspace/prometheus_test/requirements.txt --break-system-packages
@@ -67,7 +67,7 @@ pipeline {
                             }
                             def fastapi_pid = sh( script: "head -n 4 /home/jenkins/workspace/prometheus_test/api_output.log | grep -o '[[:digit:]]*' | tail -1", returnStdout: true).trim()
                             echo "${fastapi_pid}"
-                            sh "kill ${fastapi_pid}"
+                            sh "kill -INT ${fastapi_pid}"
                         }  
                     }
                 }
