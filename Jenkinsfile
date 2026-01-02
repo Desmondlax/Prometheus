@@ -21,19 +21,14 @@ pipeline {
         stage('Building & Testing in parallel'){
             parallel{
                 stage('Build') {
+                    def fastapi_pid = 0
                     steps {
-                        echo "Starting the build..."
-                        sh '''
-                        pip install --no-cache-dir --upgrade -r /home/jenkins/workspace/prometheus_test/requirements.txt --break-system-packages
-                        uvicorn main:app --reload --host 127.0.0.1 --port 80
-                        '''
                         script{
-                            when {server_shutdown == true}
-                                steps {
-                                        sh'''
-                                        os.kill(os.getpid(), signal.SIGINT)
-                                        ''' 
-                                }
+                            echo "Starting the build..."
+                            sh '''
+                            pip install --no-cache-dir --upgrade -r /home/jenkins/workspace/prometheus_test/requirements.txt --break-system-packages
+                            '''
+                            fastapi_pid = uvicorn main:app --reload --host 127.0.0.1 --port 80 | grep "Started server process [$(fastapi_pid)]"
                         }
                     }
                 }
@@ -60,6 +55,7 @@ pipeline {
                                     if (status == "200" || status == "201") {
                                         echo "Connectivity successful!"
                                         server_shutdown = true
+                                        os.kill(fastapi_pid, signal.SIGINT)
                                         break // Exit the loop on success
                                     }
                                 } catch (Exception e) {
