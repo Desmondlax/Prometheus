@@ -47,6 +47,7 @@ pipeline {
                             def url = 'http://127.0.0.1:80/'
                             def maxRetries = 5
                             def retryDelay = 5
+                            def fastapi_pid = 0
 
                             for (int i=0; i < maxRetries; i++){
                                 try {
@@ -59,8 +60,9 @@ pipeline {
 
                                     if (status == "200" || status == "201") {
                                         echo "Connectivity successful!"
+                                        def fastapi_pid = sh( script: "grep -o '[0-9]\+' /home/jenkins/workspace/prometheus_test/api_output.log | tail -1")
                                         //server_shutdown = true
-                                        //os.kill(fastapi_pid, signal.SIGINT)
+                                        os.kill(fastapi_pid, signal.SIGINT)
                                         break // Exit the loop on success
                                     }
                                 } catch (Exception e) {
