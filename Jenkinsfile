@@ -1,4 +1,3 @@
-def fastapi_pid = 0
 
 pipeline {
     agent { 
@@ -22,13 +21,12 @@ pipeline {
             parallel{
                 stage('Build') {
                     steps {
-                        script{
                             echo "Starting the build..."
                             sh '''
                             pip install --no-cache-dir --upgrade -r /home/jenkins/workspace/prometheus_test/requirements.txt --break-system-packages
-                            fastapi_pid = uvicorn main:app --reload --host 127.0.0.1 --port 80 | grep "Started server process [$(fastapi_pid)]"
                             '''
-                        }
+                            def fileList = sh script: "uvicorn main:app --reload --host 127.0.0.1 --port 80 -lhtr", returnStdout: true
+                            print(fileList)
                     }
                 }
                 stage('Test') {
