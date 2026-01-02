@@ -27,12 +27,12 @@ pipeline {
                         pip install --no-cache-dir --upgrade -r /home/jenkins/workspace/prometheus_test/requirements.txt --break-system-packages
                         uvicorn main:app --reload --host 127.0.0.1 --port 80
                         '''
-                        when {server_shutdown true}
+                        when {server_shutdown == true}
                             steps {
                                 script{
                                     sh'''
-                                os.kill(os.getpid(), signal.SIGINT)
-                                '''
+                                    os.kill(os.getpid(), signal.SIGINT)
+                                    '''
                                 }  
                             }
                     }
