@@ -34,12 +34,10 @@ pipeline {
                             } catch (Exception e) {
                                 echo "Ending the build stage and proceeding to delivery"
                             }
-
-                            
-                            }
-                            
-                    }
-                }
+                        }
+                    }       
+                
+                
                 stage('Test') {
                     steps {
                         sh '''
@@ -94,5 +92,5 @@ pipeline {
                 }
             }
         }
-    }
+    } 
 }
