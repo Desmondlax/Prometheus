@@ -84,11 +84,13 @@ pipeline {
         
         stage('Deliver') {
             steps {
-                if (test_success == 1){
-                    echo "Test completed successfully"
-                }
-                else {
-                    echo "Test failed"
+                script {
+                    if (test_success == 1){
+                        echo "Test completed successfully"
+                    }
+                    else {
+                        echo "Test failed"
+                    }
                 }
             }
         }
