@@ -22,7 +22,8 @@ pipeline {
             parallel{
                 stage('Build') {
                     steps {
-                            try{
+                            script{
+                                try{
                                 timeout(time: 10, unit: 'MINUTES')
                                 {
                                 echo "Starting the build..."
@@ -31,9 +32,11 @@ pipeline {
                                 uvicorn main:app --reload --host 127.0.0.1 --port 80 > /home/jenkins/workspace/prometheus_test/api_output.log 2>&1
                                 ''' 
                                 }
-                            } catch (Exception e) {
-                                echo "Ending the build stage and proceeding to delivery"
+                                } catch (Exception e) {
+                                    echo "Ending the build stage and proceeding to delivery"
+                                }
                             }
+                            
                         }
                     }       
                 
